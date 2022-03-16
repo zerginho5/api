@@ -56,7 +56,7 @@ app.post("/api/user/",  jsonParser, (req, res, next) => {
 })
 
 app.post("/api/login/", jsonParser, (req, res, next) => {
-    if (!req.body.email || !req.body.password || !req.body.nombre) {
+    if (!req.body.email || !req.body.password) {
         res.status(400).json({
             "The next params have not been specified: ": (!req.body.email && " email ")
                 + (!req.body.password && " password ") 
