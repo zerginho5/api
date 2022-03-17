@@ -33,11 +33,18 @@ app.get("/api/users", (req, res, next) => {
     });
 });
 
-app.post("/api/user/",  jsonParser, (req, res, next) => {
+app.post("/api/user/", jsonParser, (req, res, next) => {
     if (!req.body.email || !req.body.password || !req.body.nombre) {
         res.status(400).json({
             "The next params have not been specified: ": (!req.body.email && " email ")
                 + (!req.body.password && " password ") + (!req.body.nombre && " nombre ")
+        });
+        return;
+    }
+    if (!validateEmail(req.body.email) || !validatePass(req.body.password)) {
+        res.status(400).json({
+            "The next params have not been specified correctly: ": (!validateEmail(req.body.email) && " email ")
+                + (!validatePass(req.body.password) && " password ") + (!req.body.nombre && " nombre ")
         });
         return;
     }
@@ -54,12 +61,32 @@ app.post("/api/user/",  jsonParser, (req, res, next) => {
         })
     });
 })
-
+const validateEmail = (email) => {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+};
+const validatePass = (password1) => {
+    return /[a-z]/.test(password1)
+        && /[A-Z]/.test(password1)
+        && /[0-9]/.test(password1)
+        && /[!@#$%^&*_-~.,;:+=]/.test(password1)
+        && String(password1).length >= 8
+};
 app.post("/api/login/", jsonParser, (req, res, next) => {
     if (!req.body.email || !req.body.password) {
         res.status(400).json({
             "The next params have not been specified: ": (!req.body.email && " email ")
-                + (!req.body.password && " password ") 
+                + (!req.body.password && " password ")
+        });
+        return;
+    }
+    if (!validateEmail(req.body.email) || !validatePass(req.body.password)) {
+        res.status(400).json({
+            "The next params have not been specified correctly: ": (!validateEmail(req.body.email) && " email ")
+                + (!validatePass(req.body.password) && " password ")
         });
         return;
     }
