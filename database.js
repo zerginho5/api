@@ -10,20 +10,14 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         throw err
     } else {
         console.log('Connected to the SQLite database.')
-        db.run(`CREATE TABLE user (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre text, 
-            email text UNIQUE, 
-            password text, 
-            CONSTRAINT email_unique UNIQUE (email)
-            )`,
+        db.run(`drop TABLE user`,
             (err) => {
                 if (err) {
                     // Table already created
                 } else {
                     // Table just created, creating some rows
-                    var insert = 'INSERT INTO user (nombre, email, password) VALUES (?,?,?)'
-                    db.run(insert, ["wortev", "admin@wortev.com", md5("Password123")])
+                    //var insert = 'INSERT INTO user (nombre, email, password) VALUES (?,?,?)'
+                    //db.run(insert, ["wortev", "admin@wortev.com", md5("Password123")])
                 }
             });
     }
